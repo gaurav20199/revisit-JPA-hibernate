@@ -1,0 +1,81 @@
+JPA(Jakarta Persistence API) is a specification for managing and persisting Java objects in relational databases
+It is part of the Java Enterprise Edition
+JPA provides a set of Java interfaces and annotations that allow developers to map their Java objects to relational
+tables and columns and also provides a runtime API for performing operations such as inserting, updating, and
+retrieving data.
+Previously it was called as Java Persistence API. Since Java EE was open-sourced and eclipse foundation took over the
+project it's name got changed to Jakarta Persistence API.
+
+Hibernate is an implementation. It is an ORM Framework.
+
+JPA is completely different from JDBC
+JDBC is a vanilla way of interacting with DBMS, Managing and persisting Java Objects.
+
+Mindset in JDBC VS JPA                          _______________
+                                               |               |
+  Operation 1 performing insert----------------|      DB       |
+                                               |               |
+  Operation 2 performing update----------------|_______________|
+
+  When we are doing two operations using JDBC like shown above we can be rest assured that there will be only 2
+  queries have been executed in Database for this case.
+
+  For JPA
+                                                    _______________
+                                                   |               |
+      Operation 1 performing insert----------------|    Context    |----------- DB
+                                                   |               |
+      Operation 2 performing update----------------|_______________|
+
+  In Context, we have instances of objects that the framework can control. It is kind of a collection of objects which
+  framework can see and can directly control usually via Reflection mechanism.
+
+ In case of JPA we can't directly say that 2 queries will be executed since all the operations are first done on Context
+ and then the framework will try to make all the changes that has been done in the context to the DB as well.
+ It depends on the lifecycle of the object and what are the api(s) called.
+
+ Context
+ Persistence Context aka Context is a set of managed entities in memory, and Hibernate tracks their state.
+ Persistence Context gets cleared after transaction has been committed.
+ Context Size should usually be small. We shouldn't add more and more objects in it.
+
+ When we use JDBC we have to provide the driver which in turns provide the implementation of the vendor that we use.
+ Now there can be multiple vendors like Mysql, Postgress, Mongo DB etc. It is not really effective to provide
+ implementation of all these vendors as part of JDK. So we have a plug and play type of system where we add the driver
+ and driver in turns provide the implementation.
+ IN JDK basically we only have the contract in the form of java.sql.
+
+ Hibernate and JDBC Connection???
+ Hibernate under the hood uses JDBC only to mirror the context to the Database and since JDBC requires driver hence
+ hibernate requires it too.
+
+ Connecting to a DB with a JPA implementation
+ Define persistence.xml file or Configuration on basis of Java class.
+
+ EntityManager represents the manager that is managing the context.
+
+ Entity: Entity is anything that models to be persisted in the DB/ Basically the tables in the DB without join tables.
+
+ Common api(s)
+ 1) Persist:: It helps in adding an object to the Context. It is not equivalent to an insert query. Basically it adds
+ an object to the context and then while committing the transaction, Hibernate internally tries to mirror both the
+ db and the context. This operation may or might result in running an insert query on the db.
+ Example: This will lead to insert query if id 1 is not present in db
+     entityManager.getTransaction().begin();
+     Product product = new Product();
+     product.setId(1);
+     product.setName("product1");
+     entityManager.persist(product);
+     entityManager.getTransaction().commit();
+
+ If id 1 was already present and id here is primary key then we will get this error:
+ Caused by: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '1' for key 'product.PRIMARY'
+
+ When not to use JPA??
+ When we have to manage a large number of objects. In case of large number of objects, context will be large as well and
+ performance can be affected.
+
+
+
+
+
