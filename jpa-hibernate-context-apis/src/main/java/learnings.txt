@@ -1,0 +1,110 @@
+Different between name attribute in Entity and Table Annotation
+In Entity the name attribute signifies that in the context the object name with the name provided.
+In Table annotation it signifies the name by which table has to be created/or already created in the db.
+
+Entity Life Cycle States
+  Transient Entity:
+  A new entity that has not been added to the persistence context is a Transient Entity.
+  It is not tracked by Hibernate and will not be persisted or updated when the transaction commits unless it is
+  explicitly added to the persistence context with persist().
+
+ Persistent/Managed Entity:
+ An entity is considered "managed" if it is part of the persistence context (i.e., it has been added to the entity
+ manager via persist(), or it was retrieved from the database).
+ Hibernate tracks changes to the entity (any modifications, like setting fields or calling remove()).
+ Changes to the entity are synchronized with the database when the transaction is committed.
+ The entity is automatically synchronized with the database during the transaction.
+ Persistence Context: Managed by Hibernate.
+ This state is reached when:
+ 1) entityManager.persist(entity) or session.save(entity) in JPA or Hibernate.
+ 2) entityManager.merge(entity) if the entity is already managed or detached.
+
+ Removed Entity:
+If an entity is removed(e.g. with entityManager.remove()), it is marked as removed in the persistence context.This means
+Hibernate knows the entity is marked for deletion, and it will execute a DELETE query when the transaction is committed.
+It is present in the persistence context though.
+This state is reached when entityManager.remove(entity) or session.delete(entity) is called.
+
+ Detached Entity:
+ When the transaction commits and the entity manager is closed, the entity becomes detached (i.e., it is no longer
+ managed by the persistence context).
+ Detached entities can be reattached to a new session/EntityManager using merge() or update().
+ This state can be reached when:
+ 1) The session/EntityManager is closed.
+ 2) The entity is evicted using session.evict(entity) or entityManager.detach(entity)
+
+ What happens to a Detached Entity???
+ An entity becomes detached when it is no longer managed by the persistence context. This happens in several cases,
+ in several cases. For eg:
+ After a transaction is committed: When the transaction commits, the persistence context is cleared, and all managed
+ entities become detached.
+ When the entity manager is closed: If you explicitly close the EntityManager, any entities that were managed are
+ now detached.
+ When detach() is called: If you call entityManager.detach(entity), the entity is removed from the persistence context
+ and becomes detached.
+ Once an entity becomes detached, it is no longer tracked by Hibernate, meaning any changes made to the entity are not
+ automatically persisted to the database when the transaction is committed.
+ If you make changes to a detached entity, these changes will not be automatically synchronized with the database.
+
+
+ Diff between Flush and Transaction Commit
+ Flush Operation::
+ 1) Flush is the process by which Hibernate synchronizes the in-memory persistence context (i.e., the set of managed
+    entities) with the database. It essentially "pushes" changes that have been made to managed entities (like persist(),
+    update(), or remove()) to the database, but it doesn't necessarily commit the transaction.
+ 2) Flushing can happen automatically at various points, like before the query execution or during transaction commit,
+    but it can also be triggered manually using flush().
+ 3) When the persistence context is flushed, Hibernate checks for all changes made to the entities and pushes them to
+    the database (INSERT, UPDATE, DELETE).
+ 4) However, flush does not commit the transaction. It only ensures that the changes are persisted to the database.
+    The transaction is still active, and it can still be rolled back.
+
+ Automatic Flush: Happens at certain points like:
+ Before a query is executed.
+ Before the transaction is committed.
+
+ Manual Flush: You can trigger it explicitly with entityManager.flush().
+
+ Commit::
+ 1) Commit is the operation that finalizes the transaction. It signifies that all operations in the transaction
+    (i.e., changes made to entities in the persistence context) are complete, and Hibernate will write all changes to
+    the database permanently.
+ 2) When you commit the transaction, it flushes the persistence context and makes all changes permanent
+    (i.e., the database writes are made permanent).
+ 3) Commit is typically called after flush() is implicitly or explicitly triggered, to ensure that all changes are
+    synchronized with the database. When you commit, all changes in the persistence context are flushed, and the
+    transaction is closed.
+ 4) After committing a transaction, the persistence context is cleared, and all entities in that context are detached.
+
+Context Api(s)
+
+ 1) Persist:: It helps in adding an object to the Context. It is not equivalent to an insert query. Basically it adds
+ an object to the context and then while committing the transaction, Hibernate internally tries to mirror both the
+ db and the context. This operation may or might result in running an insert query on the db.
+ Example: This will lead to insert query if id 1 is not present in db
+     entityManager.getTransaction().begin();
+     Product product = new Product();
+     product.setId(1);
+     product.setName("product1");
+     entityManager.persist(product);
+     entityManager.getTransaction().commit();
+
+ 2) Refresh:: Mirror the context from the db that is trying to make context and db same
+ 3) Merge:: Merges an entity outside the context to the context.
+ 4) Find:: Find the entity by primary key if it is not present in the context.
+ 5) Detach:: Taking the entity out of the context.
+ 6) Remove:: Marking an entity for removal from the db. It will still remain in the context till transaction finishes.
+
+    Persist vs Merge
+
+    Persist::
+    Only used for new entities that is in Transient state
+    If the entity already exists in the database (i.e., it has an ID), persist() will fail.
+    Does not update the database if the entity already exists in the database.
+
+    Merge::
+    The merge() method is used to merge the state of a detached entity into the current persistence context.
+    If the entity already exists in the database, it will be updated. If the entity does not exist in the database,
+    merge() will behave like persist() and insert a new row.
+    Unlike persist(), merge() does not throw an exception if the entity already exists in the database; instead,
+    it returns a managed copy of the entity that is in the current session.
