@@ -1,0 +1,39 @@
+Enabling Hbm2ddl property in Hibernate
+Hbm2ddl is Hibernate mapping to Data Description Language, it can be enabled/disabled using hibernate.hbm2ddl.auto prop
+It is used to generate or update the database schema from the JPA and Hibernate entity mappings.
+none – This option disables the hbm2ddl.auto tool, so Hibernate is not going to take any action for managing the
+underlying database schema.
+create-only – This option instructs Hibernate to generate the database schema from the entity model.
+drop – This option instructs Hibernate to drop the database schema using the entity model as a reference for the DDL
+DROP statements.
+create – This option instructs Hibernate to drop the database schema and recreate it afterward using the entity model
+as a reference.
+create-drop – This option instructs Hibernate to drop the database schema and recreate it afterward using the
+entity model as a reference. And, upon closing the JPA EntityManagerFactory or the Hibernate SessionFactory,
+the database schema will be dropped again.
+validate – This option instructs Hibernate to validate the underlying database schema against the entity mappings.
+update – This option instructs Hibernate to update the database schema by comparing the existing schema with the entity
+mappings and generate the appropriate schema migration scripts.
+
+Using hibernate.hbm2ddl is not recommended in prod better to use flyway/liquibase for this
+
+Find Vs GetReference()
+Find-> Will issue a select query everytime to db if entity is not already present in the context. It is like an eager
+fetch and GetReference is like a lazy fetch.
+
+Unlike find, the getReference only returns an entity Proxy which only has the identifier set. If you access the Proxy,
+the associated SQL statement will be triggered as long as the EntityManager is still open.
+If we access anything on the proxy object like calling toString, any getter then call for select query will be made to
+Database, and we will get the object.
+If we try accessing the proxy object when Entity manager is closed then we will get LazyInitializationException.
+
+
+Use case of Refresh::
+Suppose we have a complex business logic and at a particular instance we are trying to get multiple attribute.We are not
+sure that the attributes that we are trying to access have been modified or not. For this case, we can do a refresh on
+the entity so that whatever changes has been done to those attributes will now be overridden, and it will be synced with
+the values present in db.
+2) Refresh makes a select db call to the database and replace the entity present in the context with the db entity.
+3) Refresh can be treated as an undo for any change that has been done in the context.
+
+
