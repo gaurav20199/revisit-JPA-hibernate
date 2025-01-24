@@ -17,6 +17,7 @@ target/
 jpa-hibernate-setup-with-logging/.idea
 jpa-hibernate-context-apis/.idea
 jpa-hibernate-context-apis-2/.idea
+jpa-hibernate-primary-key/.idea
 *.iws
 *.iml
 *.ipr
