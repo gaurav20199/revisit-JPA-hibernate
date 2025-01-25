@@ -1,0 +1,70 @@
+One to One Mapping
+1) One to One mapping can be established from one side or from both the sides that is bidirectional one to one mapping.
+Uni Directional One-to-One Relationship
+Suppose you have a Person and an Address class. Now there can be different scenarios::
+1) One directional relationship from Person to Address that is Person having a reference of Address in the Person class.
+In this case Person is owner of the relationship.
+2) One directional relationship from Address to Person that is Address having a reference of Person in the Address class
+In this case Address is the owner of the relationship.(Doesn't make much sense but in some other example it can be true)
+
+NOTE:
+1) Owner of the Relationship will also have the foreign key column in the table.
+2) Concept of Ownership doesn't exist for Many-to-Many Relationship.
+
+Bi Directional One-to-One Relationship
+Person and Address both have reference of each other in their class.
+Concept of ownership exists here as well, one side of the relationship is designated as the primary responsible entity
+for managing the connection between the two entities involved, while the other side is considered the "inverse" or
+"dependent" side
+
+How to decide whether to go for One Directional, Bi Directional and who will be the owner??
+It depends on the query that we will be running mostly for Person and Address. If we know that we be having queries
+mostly from Person direction to Address then it is better to have Person as the owner of the Relationship.
+Similarly choosing between One Directional or Bi Directional, depends a lot on the queries that we will be executing.
+
+Entity attribute is not marked with association annotation??
+When adding a custom entity in any entity we will have to provide an association.
+
+Use of @JoinColumn
+It is used for a lot of things. Primary role(s) are:
+@JoinColumn indicates that this entity is the owner of the relationship, that the corresponding table has a column with
+a foreign key to the referenced table.
+If we want to change the foreign key column name that can be done using it.
+We can specify the column definition, specify whether it is a unique key or not and much more...
+
+If no @JoinColumn is declared on the owner side, the defaults apply. A join column(s) will be created in the owner table
+and its name will be the concatenation of the name of the relationship in the owner side, _ (underscore), and the name
+of the primary key column(s) in the owned side.
+
+Why is the concept of owner has importance???
+This helps in writing the query. From owner side(suppose Person) we can easily reference the Address using
+person.address.city and person.address.pincode but same can't be done from Address side. JPQL helps in that.
+
+Bidirectional Relationship::
+1) Mapped By is used in an entity which has relationship with the owner of the Relationship.
+2) Both sides should be linked to each other that is set on each other.
+3) Both should be persisted as well
+4) Helps in querying from both sides of the entity.
+
+Cascading::
+1) Cascading means that when you apply a context operation (PERSIST for example) it automatically gets applies to the
+objects that instance has relationship with.
+2) This helps in not persisting/removing/other operations on both the entities which are part of the relationship.
+3) Use cascading carefully.
+4) Cascade type can be used in the Relationship annotations like:: OneToOne, OneToMany etc.
+5) We can provide multiple cascade type as well.
+
+FetchType::
+1) Fetch Type can be Eager/Lazy
+2) If it is lazy then the referenced entity will be fetched from db only when we will be using it.
+3) Fetch type that ends with @...ToOne is always Eager, while @...toMany is Lazy by default. The reason is that because
+collections should not be eagerly loaded.
+
+V.V. IMP
+One-To-One Relationship in DB might or might not map to the Entity Design.
+For eg: Person and Address can be defined as one-to-one relationship in db and similarly there will be 2 entities in
+code as well too.
+But there are cases when we might have a single entity which might be a composition of multiple tables in the databases
+and these tables will be mapped one to one but on code level there will be only single entity.
+Eg: User Entity composed of User table information and user_details table information. In such cases we use
+SecondaryTable annotation. In our code User is a single entity but on db user and user_details are separate tables.
