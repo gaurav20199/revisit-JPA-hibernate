@@ -25,7 +25,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"), // column for current entity in the join table
             inverseJoinColumns = @JoinColumn(name = "group_id") // column for opposite side entity in the join table.
     )
-    List<UGroups> groups;
+    private List<UGroups> groups;
 
     public String getName() {
         return name;

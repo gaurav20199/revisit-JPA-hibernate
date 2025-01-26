@@ -8,3 +8,7 @@ One Directional Many-To-Many-Relationship
 1) We have to Use Join Table Annotation here as under the hood a join table will be created in the db.
 2) Join Table will have information about join table name and join table columns name using Join Table and Inverse Join
 Table property.
+
+Bi Directional Many-to-Many Relationship
+1) In One entity we will place the Join Table Annotation and define information about Join Table.
+2) In other entity we will use mapped by Attribute as it is Bi-Directional.

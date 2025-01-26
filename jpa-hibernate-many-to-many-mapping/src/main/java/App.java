@@ -30,6 +30,9 @@ public class App {
             User user2 = new User();
             user2.setName("user2");
             user2.setGroups(List.of(group2));
+
+            group1.setUsers(List.of(user1));
+            group2.setUsers(List.of(user1,user2));
             entityManager.persist(group1);
             entityManager.persist(group2);
             entityManager.persist(user1);
