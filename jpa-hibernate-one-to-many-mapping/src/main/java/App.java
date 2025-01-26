@@ -1,3 +1,5 @@
+import entities.AltWayComment;
+import entities.AltWayPost;
 import entities.Comment;
 import entities.Post;
 import jakarta.persistence.EntityManager;
@@ -5,6 +7,7 @@ import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import persistence.CustomPersistenceUnitInfo;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class App {
@@ -29,6 +32,16 @@ public class App {
 
             entityManager.persist(comment);
             entityManager.persist(post);
+
+            AltWayComment comment1 = new AltWayComment();
+            comment1.setContent("alt comment");
+            AltWayPost post1 = new AltWayPost();
+            post1.setTitle("Alt Post Title");
+            post1.setContent("Alt Post Content");
+            post1.setComments(List.of(comment1));
+
+            entityManager.persist(comment1);
+            entityManager.persist(post1);
 
             System.out.println("COMMITTING Transaction");
 

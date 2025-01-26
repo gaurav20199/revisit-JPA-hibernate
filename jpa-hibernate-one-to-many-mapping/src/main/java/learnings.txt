@@ -7,6 +7,10 @@ There can be 2 ways to represent one to many unidirectional mapping::
 1) Unidirectional relationship from the Comment side(Comment becomes the owner of the relationship)
 2) Comment is still the owner of the Relationship but writing Relationship from the opposite side of the ownership.
 
+Establishing Relationship from Post side But Comment is still owner.
+1) Defining just one to many mapping from Post side where comment still holds the ownership will lead to generation of
+extra tables in db. So one to many mapping from Code side(Object side) will appear to be a many-to-many mapping from db.
+
 Where should Foreign Key be??
 Foreign key should be always at the ownership side.
 It usually should be on the many side, and it makes sense as well if seen from SQL pov as well.
