@@ -17,6 +17,10 @@ IMP::
 2) To Mitigate the above issue, we will have to tell Hibernate which is the foreign key by using the Join Column
 annotation. This is the only time JoinColumn annotation is used on an entity who is not the Owner.
 
+BiDirectional One-to-Many Relationship.
+1) Mapped by attribute has to be used on the opposite side of the ownership.
+2) JoinColumn is not mandatory if not used Hibernate can create foreign key on its own.
+
 Where should Foreign Key be??
 Foreign key should be always at the ownership side.
 It usually should be on the many side, and it makes sense as well if seen from SQL pov as well.

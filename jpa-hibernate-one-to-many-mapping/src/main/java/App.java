@@ -1,5 +1,7 @@
 import entities.AltWayComment;
 import entities.AltWayPost;
+import entities.BiDirectionalComment;
+import entities.BiDirectionalPost;
 import entities.Comment;
 import entities.Post;
 import jakarta.persistence.EntityManager;
@@ -42,6 +44,23 @@ public class App {
 
             entityManager.persist(comment1);
             entityManager.persist(post1);
+
+            BiDirectionalComment comment2 = new BiDirectionalComment();
+            comment2.setContent("bi directional comment content");
+            BiDirectionalComment comment3 = new BiDirectionalComment();
+            comment3.setContent("bi directional comment content");
+            BiDirectionalPost post2 = new BiDirectionalPost();
+            post2.setContent("Bi Directional Post Content");
+            post2.setTitle("Bi Directional Post Title");
+            post2.setComments(List.of(comment2,comment3));
+            comment2.setPost(post2);
+            comment3.setPost(post2);
+
+            entityManager.persist(comment2);
+            entityManager.persist(comment3);
+            entityManager.persist(post2);
+
+
 
             System.out.println("COMMITTING Transaction");
 
