@@ -75,6 +75,20 @@ Mindset in JDBC VS JPA                          _______________
  When we have to manage a large number of objects. In case of large number of objects, context will be large as well and
  performance can be affected.
 
+ Role of HikariPool Dependency
+ It is a lightweight JDBC connection pool library used for managing database connections in Java applications.
+ A connection pool is a collection of database connections that can be reused, reducing the overhead of repeatedly
+ opening and closing database connections.
+
+Persistence Unit vs Persistence Context
+Persistence Unit is bunch of Configuration that allows to make a connection with the DB. Based on Persistence Unit we create entityMangerFactory
+and from that we create EntityManager who actually Manages the Context.
+Context is the area where object that Hibernate can perform operation upon lies.
+EntityManager can create Multiple EntityManager and each Manager will be managing a particular context so we can have multiple Persistence
+Context in our app. 
+
+
+
 
 
 
