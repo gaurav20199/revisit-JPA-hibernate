@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class AltWayPost {
      */
 
     @OneToMany
+    @JoinColumn(name = "post_id") // since foreign key will always be on comments side hence fk name is post_id
     private List<AltWayComment> comments;
 
     public String getContent() {

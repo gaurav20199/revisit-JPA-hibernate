@@ -10,6 +10,12 @@ There can be 2 ways to represent one to many unidirectional mapping::
 Establishing Relationship from Post side But Comment is still owner.
 1) Defining just one to many mapping from Post side where comment still holds the ownership will lead to generation of
 extra tables in db. So one to many mapping from Code side(Object side) will appear to be a many-to-many mapping from db.
+Reason is:: There is no way for Hibernate to know how to create Foreign Key since JPA implementation(Hibernate)
+don't know how to create foreign key when owner is on opposite side and Relationship is established from diff end.
+The third table created by Hibernate is known as Join Table.
+IMP::
+2) To Mitigate the above issue, we will have to tell Hibernate which is the foreign key by using the Join Column
+annotation. This is the only time JoinColumn annotation is used on an entity who is not the Owner.
 
 Where should Foreign Key be??
 Foreign key should be always at the ownership side.
