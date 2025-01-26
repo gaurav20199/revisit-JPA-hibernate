@@ -1,5 +1,6 @@
 package entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +26,7 @@ public class BiDirectionalPost {
      *
      */
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<BiDirectionalComment> comments;
 
     public String getContent() {

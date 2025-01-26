@@ -55,9 +55,9 @@ public class App {
             post2.setComments(List.of(comment2,comment3));
             comment2.setPost(post2);
             comment3.setPost(post2);
-
-            entityManager.persist(comment2);
-            entityManager.persist(comment3);
+              // No need if using cascading on post.
+//            entityManager.persist(comment2);
+//            entityManager.persist(comment3);
             entityManager.persist(post2);
 
 
