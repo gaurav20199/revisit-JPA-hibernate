@@ -20,6 +20,7 @@ jpa-hibernate-context-apis-2/.idea
 jpa-hibernate-primary-key/.idea
 jpa-hibernate-one-to-one-mapping/.idea
 jpa-hibernate-one-to-many-mapping/.idea
+jpa-hibernate-many-to-many-mapping/.idea
 *.iws
 *.iml
 *.ipr

@@ -1,0 +1,10 @@
+Join Table::
+Join Table is used when Hibernate is not able to create Foreign Keys.
+It is usually created when we have Many to Many Mapping. Used to map multiple records of one entity to another.
+This is only represent on DB Level and not on Object(Java Code) level.
+
+
+One Directional Many-To-Many-Relationship
+1) We have to Use Join Table Annotation here as under the hood a join table will be created in the db.
+2) Join Table will have information about join table name and join table columns name using Join Table and Inverse Join
+Table property.
